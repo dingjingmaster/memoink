@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<link href="/lib/css/reset-basic.css" rel="stylesheet">
+<link href="/lib/css/elem-ui.css" rel="stylesheet">
+<link href="/css/common.css" rel="stylesheet">
+<link href="/css/theme/macos.css" rel="stylesheet">
+<script>window.LIBS_BASE_URL = location.origin + '/lib'</script>
+<script type="module" src="/js/app.js"></script>
+</head>
+<body anot="app" :class="{dark: DARK_MODE}">
+
+<div class="frame-less">
+  <!-- 自定义主窗口标题栏 -->
+<div class="do-mod-titlebar do-fn-drag" :class="{dark: DARK_MODE}">
+  <nav class="btns do-fn-nodrag" :class="{focus: winFocus}">
+    <span class="btn quit" :click="quit(false)"></span>
+    <span class="btn min" :click="minimize"></span>
+    <span class="btn max" :click="maximize"></span>
+  </nav>
+  <h3 class="win-title do-fn-ell" :text="docTitle"></h3>
+  <div class="tool-box do-fn-nodrag">
+    <!-- 前进后退按钮, 纯装饰, 没功能 -->
+    <nav class="move-step">
+      <a class="cm-btn do-icon-left"></a>
+      <a class="cm-btn do-icon-right"></a>
+    </nav>
+    
+    <!-- 云同步按钮, 不一定可用 -->
+    <a class="cm-btn on sync do-icon-upload"></a>
+
+    <div class="filter">
+
+      <!-- 主题列表筛选 -->
+      <div class="tag-list">
+        <i class="trigon do-icon-left"></i>
+        <select :duplex="subjectFilter">
+          <option value="-" :text="lang.SUBJECT.ALL"></option>
+          <option 
+            :for="subjectList" 
+            :attr-value="el" 
+            :text="el || lang.SUBJECT.NONE"></option>
+        </select>
+      </div>
+
+      <!-- 详细列表 | 或单标题列表 -->
+      <a 
+        class="cm-btn on icon-view do-icon-icon-list" 
+        :class="{active: listStyle === 1}"
+        :click="changeListStyle(1)"></a>
+      <a 
+        class="cm-btn on list-view do-icon-list"
+        :class="{active: listStyle === 0}"
+        :click="changeListStyle(0)"></a>
+    </div>
+
+    <!-- 首选项按钮 -->
+    <a class="cm-btn on setting do-icon-setting" :click="openPreference"></a>
+
+    <!-- 切换单栏/三栏布局模式 -->
+    <a 
+      class="cm-btn on fullscreen do-icon-layout" 
+      :class="{active: layout === 0}" 
+      :click="toggleLayout"></a>
+
+    <!-- 新建笔记按钮, 非编辑模式下可见 -->
+    <a 
+      :if="!editMode" 
+      class="cm-btn on new-note do-icon-post"
+      :click="newNote"></a>
+
+    <!-- 保存按钮 -->
+    <a 
+      class="cm-btn on save-note do-icon-floppy"
+      :if="editMode" 
+      :click="saveNote"></a>
+  
+    <!-- 导出为pdf, 按钮仅在非编辑模式下可见 -->
+    <a 
+      class="cm-btn on to-pdf do-icon-download"
+      :if="!editMode && note.uuid" 
+      :click="exportToFile('pdf')"></a>
+
+    <!-- 搜索框 -->
+    <div class="search">
+      <i class="do-icon-search"></i>
+      <input 
+        :duplex="searchTxt" 
+        :attr-placeholder="lang.SEARCH.PLACE_HOLDER"
+        :keyup="search"></input>
+    </div>
+  </div>
+</div>
+
+
+<!-- 主窗口的笔记界面 -->
+<div class="do-mod-main" :class="{'layout-1': layout === 1, dark: DARK_MODE}">
+
+  <!-- 最左侧菜单 -->
+  <aside class="sidebar do-fn-noselect">
+    <nav class="nav-box">
+      <a 
+        class="all-note" 
+        :class="{active: nav === 'total'}"
+        :click="changeNav('total')">
+        <i class="do-icon-book"></i>
+        {{lang.ALL_NOTE}}
+        <cite :text="stat.total"></cite>
+      </a>
+      <a 
+        class="star-note" 
+        :class="{active: nav === 'star'}"
+        :click="changeNav('star')">
+        <i class="do-icon-star"></i>
+        {{lang.STAR_NOTE}}
+        <cite :text="stat.star"></cite>
+      </a>
+      <a 
+        class="trash" 
+        :class="{active: nav === 'trash'}"
+        :click="changeNav('trash')">
+        <i class="do-icon-trash"></i>
+        {{lang.TRASH}}
+        <cite :text="stat.trash"></cite>
+      </a>
+    </nav>
+    <dl class="category">
+      <dt class="all-cate">
+        <span :text="lang.BOOK.ALL"></span>
+        <a class="do-icon-plus" :click="addNewBook"></a>
+      </dt>
+      <dd class="tree-box">
+        <a 
+          class="item" 
+          :for="bookList"
+          :class="{active: el.uuid === nav}" 
+          :on-contextmenu="bookMenu(el, $event)"
+          :click="changeNav(el.uuid)">
+          <i class="do-icon-folder-close"></i>
+          <span :text="el.name"></span>
+          <cite :text="el.total"></cite>
+        </a>
+      </dd>
+    </dl>
+  </aside>
+
+
+  <!-- 真正的笔记主界面 -->
+  <div class="main-body">
+
+    <!-- 中间 笔记列表 -->
+    <ul class="note-list-box do-fn-noselect">
+      <li 
+        class="item" 
+        :for="noteList"
+        :if-loop="noteVisible(el)"
+        :class="{'icon-view': listStyle === 1, active: el.uuid === note.uuid}" 
+        :on-contextmenu="noteMenu(el, $event)"
+        :click="viewNote(el)">
+        <header class="do-fn-ell">
+          <i class="do-icon-txt" :class="{star: el.stat > 0, trash: el.stat < 0}"></i>
+          <span :text="el.title"></span>
+        </header>
+        <p class="summary">
+          <span class="book">
+            <i class="do-icon-folder-close"></i>
+            {{bookFormat(el)}}
+          </span>
+          <span class="subject" :visible="el.subject">
+            <i class="do-icon-tag"></i>
+            {{el.subject}}
+          </span>
+        </p>
+      </li>
+    </ul>
+
+    <!-- 笔记详细界面 | 编辑 -->
+    <article class="note-detail" :class="{'full-view': !editMode}">
+      <header class="summary" :if="editMode">
+        <section class="do-ui-select category">
+          <select :duplex="note.book">
+            <option disabled :text="lang.BOOK.PLACE_HOLDER"></option>
+            <option :for="bookList" :attr-value="el.uuid" :text="el.name"></option>
+          </select>
+          <span class="trigon">
+            <i class="do-icon-trigon-up"></i>
+            <i class="do-icon-trigon-down"></i>
+          </span>
+        </section>
+        <input 
+          class="subject do-ui-input" 
+          :duplex="note.subject" 
+          :attr-placeholder="lang.SUBJECT.PLACE_HOLDER">
+        <input 
+          class="title do-ui-input" 
+          :duplex="note.title" 
+          :attr-placeholder="lang.NOTE.PLACE_HOLDER">
+      </header>
+
+      <i :if="!note.uuid" class="default-bg do-icon-book"></i>
+
+      <content
+        ref="note"
+        class="note-view"
+        :class="{
+          'do-marked-theme': MARKDOWN_THEME === 'default', 
+          'do-marked-theme-gfm': MARKDOWN_THEME === 'gfm', 
+          'do-marked-theme-vue': MARKDOWN_THEME === 'vue',
+          indent: INDENT
+        }"
+        :if="!editMode" 
+        :dblclick="editNote(null, $event)"
+        :html="noteHtml"></content>
+
+      <div :if="editMode" class="editor">
+        <anot-meditor 
+          :attr-toolbar="toolbar" 
+          height="100%"
+          :value="note.content"
+          @save-attach="saveAttach"
+          @get-attach-list="getAttachList"
+          @revise="reviseCompile"
+          @created="editorReady"></anot-meditor>
+      </div>
+    </article>
+
+  </div>
+</div>
+</div>
+
+
+
+
+</body>
+</html>

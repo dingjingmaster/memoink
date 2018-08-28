@@ -1,0 +1,18 @@
+{
+  "name": "memoink",
+  "version": "1.0.0",
+  "description": "忆墨笔记",
+  "main": "app.js",
+  "author": "yutent",
+  "domain": "memo.ink",
+  "scripts": {
+    "start": "nw ."
+  },
+  "license": "MIT",
+  "dependencies": {
+    "crypto.js": "^1.1.3",
+    "es.shim": "^1.1.2",
+    "iofs": "^1.1.0",
+    "sqlite3": "^4.0.2"
+  }
+}

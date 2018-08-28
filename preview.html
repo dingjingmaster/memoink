@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<link href="/lib/css/reset-basic.css" rel="stylesheet">
+<link href="/lib/css/elem-ui.css" rel="stylesheet">
+<link href="/css/common.css" rel="stylesheet">
+<style type="text/css">
+body {overflow:hidden;position:fixed;left:0;top:0;width:100%;height:100%;line-height:100vh;text-align:center;}
+img {display:inline-block;box-shadow:0 0 40px rgba(0,0,0,.3)}
+</style>
+<script>window.LIBS_BASE_URL = location.origin + '/lib'</script>
+<script type="module">
+import '/lib/anot.next.js'
+import '/lib/drag/index.js'
+
+Anot({
+  $id: 'preview',
+  state: {
+    img: window.__preview__
+  }
+})
+</script>
+</head>
+<body anot="preview">
+  <img :drag :attr-src="img">
+</body>
+</html>

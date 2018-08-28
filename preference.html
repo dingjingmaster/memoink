@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<link href="/lib/css/reset-basic.css" rel="stylesheet">
+<link href="/lib/css/elem-ui.css" rel="stylesheet">
+<link href="/css/common.css" rel="stylesheet">
+<link href="/css/preference.css" rel="stylesheet">
+<script>window.LIBS_BASE_URL = location.origin + '/lib'</script>
+<script type="module" src="/js/preference.js"></script>
+</head>
+<body anot="preference" :class="{dark: setting.DARK_MODE}">
+
+  <div class="do-mod-titlebar do-fn-drag" :class="{dark: setting.DARK_MODE}">
+    <nav class="btns do-fn-nodrag" :class="{focus: winFocus}">
+      <span class="btn quit" :click="quit"></span>
+      <span class="btn min"></span>
+      <span class="btn max"></span>
+    </nav>
+    <h3 class="win-title" :text="docTitle"></h3>
+    <div class="tool-box do-fn-nodrag">
+      <nav class="nav-box" :click="toggleNav">
+        <a class="item" :class="{active: nav === 'general'}" data-nav="general">
+          <i class="do-icon-home"></i>
+          <span :text="lang.PREFERENCE.GENERAL"></span>
+        </a>
+        <a class="item" :class="{active: nav === 'compose'}" data-nav="compose">
+          <i class="do-icon-layout"></i>
+          <span :text="lang.PREFERENCE.COMPOSE"></span>
+        </a>
+        <a class="item" :class="{active: nav === 'privacy'}" data-nav="privacy">
+          <i class="do-icon-safe"></i>
+          <span :text="lang.PREFERENCE.PRIVACY"></span>
+        </a>
+        <a class="item" :class="{active: nav === 'plugin'}" data-nav="plugin">
+          <i class="do-icon-plugin"></i>
+          <span :text="lang.PREFERENCE.PLUGIN"></span>
+        </a>
+        <a class="item" :class="{active: nav === 'donate'}" data-nav="donate">
+          <i class="do-icon-donate"></i>
+          <span :text="lang.PREFERENCE.DONATE"></span>
+        </a>
+        <a class="item" :class="{active: nav === 'about'}" data-nav="about">
+          <i class="do-icon-user"></i>
+          <span :text="lang.PREFERENCE.ABOUT"></span>
+        </a>
+      </nav>
+    </div>
+  </div>
+
+  <div class="do-mod-main do-fn-noselect" :class="{dark: setting.DARK_MODE}">
+
+    <div class="general-box" :if="nav === 'general'">
+      <section class="section">
+        <span class="label">{{lang.SETTING.CLOSE_2_HIDE}} :</span>
+        <anot-switch :value="setting.CLOSE_2_HIDE"></anot-switch>
+      </section>
+      <section class="section">
+        <span class="label">{{lang.SETTING.AUTO_SAVE}} :</span>
+        <anot-switch :value="setting.AUTO_SAVE"></anot-switch>
+      </section>
+      <section class="section">
+        <span class="label">{{lang.SETTING.READONLY}} :</span>
+        <anot-switch :value="setting.READONLY"></anot-switch>
+      </section>
+      <section class="section">
+        <span class="label">{{lang.SETTING.DARK_MODE}} :</span>
+        <anot-switch :value="setting.DARK_MODE"></anot-switch>
+      </section>
+      <section class="section">
+        <span class="label">{{lang.SETTING.THEME}} :</span>
+        <label class="do-ui-select theme-list">
+          <select :duplex="setting.THEME">
+            <option value="macos" :text="lang.THEME.MACOS"></option>
+            <option disabled value="deepin" :text="lang.THEME.DEEPIN"></option>
+            <option disabled value="windows" :text="lang.THEME.WINDOWS"></option>
+          </select>
+          <span class="trigon">
+            <i class="do-icon-trigon-up"></i>
+            <i class="do-icon-trigon-down"></i>
+          </span>
+        </label>
+        <span class="tips">{{lang.CHANGE_TIPS}}</span>
+      </section>
+      <section class="section">
+        <span class="label">{{lang.SETTING.LANG}} :</span>
+        <label class="do-ui-select theme-list">
+          <select :duplex="setting.LANG">
+            <option value="zh" :text="lang.LANG.ZH"></option>
+            <option value="en" :text="lang.LANG.EN"></option>
+          </select>
+          <span class="trigon">
+            <i class="do-icon-trigon-up"></i>
+            <i class="do-icon-trigon-down"></i>
+          </span>
+        </label>
+        <span class="tips">{{lang.CHANGE_TIPS}}</span>
+      </section>
+    </div>
+
+    <div class="compose-box" :if="nav === 'compose'">
+      <section class="section">
+        <span class="label">{{lang.SETTING.INDENT}} :</span>
+        <anot-switch :value="setting.INDENT"></anot-switch>
+      </section>
+      <section class="section">
+        <span class="label">{{lang.SETTING.TOC}} :</span>
+        <anot-switch disabled :value="setting.TOC"></anot-switch>
+      </section>
+      <section class="section">
+        <span class="label">{{lang.SETTING.MARKDOWN_THEME}} :</span>
+        <label class="do-ui-select theme-list">
+          <select :duplex="setting.MARKDOWN_THEME">
+            <option value="default" :text="lang.MARKDOWN_THEME.DEFAULT"></option>
+            <option value="gfm" :text="lang.MARKDOWN_THEME.GFM"></option>
+            <option value="vue" :text="lang.MARKDOWN_THEME.VUE"></option>
+          </select>
+          <span class="trigon">
+            <i class="do-icon-trigon-up"></i>
+            <i class="do-icon-trigon-down"></i>
+          </span>
+        </label>
+      </section>
+    </div>
+
+    <div class="privacy-box" :if="nav === 'privacy'">
+      <section class="section">
+        <span class="label">{{lang.SETTING.PASSWD}} :</span>
+        <input maxlength="8" class="do-ui-input" :value="setting.PASSWD"></input>
+      </section>
+    </div>
+
+    <div class="plugin-box" :if="nav === 'plugin'">
+      <a class="do-ui-button medium grey install-plugin">
+        {{lang.PLUGIN.INSTALL}}
+        <input type="file" :change="pluginSelect">
+      </a>
+      <ul class="plugin-list">
+        <section class="item" :for="it in plugins">
+          <h5 class="name">{{it.name}} {{it.version}} - ({{it.author}})</h5>
+          <p class="tool">
+            <span 
+              class="do-ui-button grey" 
+              :click="showPluginSetting(it)">{{lang.PLUGIN.SETTING}}</span>
+            <span class="do-ui-button red">{{lang.PLUGIN.UNINSTALL}}</span>
+          </p>
+          <div class="setting-box" :if-loop="it.fields.length > 0" :class="{active: pluginID === it.uuid}">
+            <a class="close do-icon-close" :click="closePluginSetting"></a>
+            <ul class="field-box">
+              <li class="field" :for="it.fields" :html="parseField(it.uuid, el)"></li>
+            </ul>
+            <a class="save do-icon-floppy do-ui-button medium teal" :click="savePluginSetting">保存</a>
+          </div>
+        </section>
+      </ul>
+    </div>
+
+    <div class="donate-box" :if="nav === 'donate'">
+        
+      <p :text="lang.DONATE"></p>
+      
+      <img src="/images/wechat.jpg">
+      <img src="/images/alipay.jpg">
+        
+    </div>
+
+    <div class="about-box" :if="nav === 'about'">
+      <pre> __  __                     ___       _    
+|  \/  | ___ _ __ ___   ___|_ _|_ __ | | __
+| |\/| |/ _ \ '_ ` _ \ / _ \| || '_ \| |/ /
+| |  | |  __/ | | | | | (_) | || | | |   < 
+|_|  |_|\___|_| |_| |_|\___/___|_| |_|_|\_\</pre>
+      <pre :text="version"></pre>
+      <p><span class="do-st-hand" :text="lang.UPDATE_LOGS"></span></p>
+      <p><a href="https://club.doui.cc/cate/view/memoink?from=app" :text="lang.ADVICE"></a></p>
+    </div>
+    
+  </div>
+</body>
+</html>

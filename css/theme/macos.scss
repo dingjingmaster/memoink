@@ -1,0 +1,380 @@
+@charset "UTF-8";
+/**
+ * 
+ * @authors yutent (yutent@doui.cc)
+ * @date    2018-08-05 01:16:54
+ */
+
+@import "../var.scss";
+
+body {line-height:1.5;font-size:1.3rem;color:nth($cd, 1);
+
+  .frame-less {padding-top:60px;}
+
+  &.dark {color:nth($cp, 1);
+
+    .do-ui-select,.do-ui-radio, .do-ui-checkbox {color:nth($cp, 3);}
+    .do-ui-input,.do-ui-select select {background:nth($cgr, 1);}
+  }
+}
+
+// 标题栏样式
+.do-mod-titlebar {position:absolute;left:0;top:0;z-index:99;width:100%;height:60px;background:linear-gradient(180deg, #f7f8fb 0, #e7e8eb);border-bottom:1px solid nth($cp, 3);
+
+  .btns {position:absolute;z-index:3;left:12px;top:0;width:auto;height:30px;padding:9px 0;
+
+    .btn {display:inline-block;width:12px;height:12px;margin:0 2px;background:url(/images/btn_gray@2x.png) no-repeat;background-size:cover;}
+
+    &.focus {
+      .quit {background-image:url(/images/btn_close_focus@2x.png);}
+      .min {background-image:url(/images/btn_min_focus@2x.png);}
+      .max {background-image:url(/images/btn_max_focus@2x.png);}
+    }
+    &:hover {
+      .quit {background-image:url(/images/btn_close_hover@2x.png);}
+      .min {background-image:url(/images/btn_min_hover@2x.png);}
+      .max {background-image:url(/images/btn_max_hover@2x.png);}
+    }
+  }
+
+  .win-title {position:absolute;left:0;top:0;z-index:0;width:100%;height:30px;padding:0 10%;line-height:30px;font-size:1.4rem;text-align:center;font-weight:normal;}
+
+  .tool-box {position:absolute;left:0;bottom:3px;width:100%;height:30px;padding:0 12px;
+
+    .cm-btn {width:2.5rem;height:2rem;margin:5px 0;line-height:2rem;text-align:center;font-size:1.6rem;color:nth($cp, 3);border-radius:3px;background:#fff;box-shadow:0 1px 0 rgba(0,0,0,.1);
+      
+      &.on {color:nth($cd, 2);}
+      &.on:active {background:nth($cp, 1);}
+    }
+
+    .move-step {float:left;}
+    .sync {position:absolute;left:140px;}
+    .filter {position:absolute;left:180px;width:200px;padding-right:50px;
+
+      .tag-list  {position:relative;width:95%;height:30px;color:nth($cgr, 1);
+
+        select {width:100%;height:100%;padding:5px 5px 5px 25px;line-height:1;background:transparent;appearance:none;border:0;outline:none;color: nth($cd, 2);font-size:1.3rem;
+        }
+        .trigon {position:absolute;left:5px;top:8px;width:15px;height:15px;line-height:15px;text-align:center;font-size:1.5rem;transform:rotate(-90deg)}
+      }
+
+      .icon-view, .list-view {position:absolute;right:0;top:0;font-weight:bold; 
+        
+        &.active {background:nth($cd, 1);color:#fff;}
+      }
+      .list-view {border-top-left-radius:0;border-bottom-left-radius:0;}
+      .icon-view {right:25px;border-top-right-radius:0;border-bottom-right-radius:0;}
+    }
+    .setting {position:absolute;left:400px;}
+    .fullscreen {position:absolute;left:440px;
+      
+      &.active {background:nth($cd, 1);color:#fff;}
+    }
+    .new-note {position:absolute;left:480px;}
+    .save-note {position:absolute;left:480px;}
+    .to-pdf {position:absolute;left:520px;}
+
+    .search {float:right;width:auto;height:24px;margin-top:3px;padding:0 5px;line-height:25px;background:#fff;border-radius:3px;box-shadow:0 1px 0 rgba(0,0,0,.1);
+
+      i {float:left;width:25px;font-size:2rem;}
+      input {float:left;width:130px;height:24px;border:0;background:none;@include ts;
+
+        &:focus {width:230px;}
+      }
+    }
+  }
+
+  &.dark {background:linear-gradient(180deg, nth($cd, 1) 0, nth($cd, 2));border-color:nth($cd, 2);
+
+    .tool-box {
+      .cm-btn {color:nth($cgr, 2);background:nth($cd, 1);
+
+        &.on {color:nth($cp, 3);}
+        &.on:active {background:nth($cd, 3);}
+      }
+
+      .filter {
+        .tag-list  {
+          select {color: nth($cp, 2);
+          }
+        }
+        .icon-view, .list-view {
+          &.active {background:nth($cd, 3);color:#fff;}
+        }
+      }
+    }
+
+    .search {background:nth($cd, 1);
+
+      input {color:nth($cp, 3);
+        
+        &::-webkit-input-placeholder {color:nth($cgr, 1);}
+      }
+    }
+
+  }
+}
+
+// 主界面样式
+.do-mod-main {position:relative;z-index:1;width:100%;height:100%;padding-left:180px;background:#fff;@include ts;
+
+  
+  // 主界面侧边栏样式
+  .sidebar {position:absolute;z-index:2;left:0;top:0;width:180px;height:100%;padding:135px 0 5px;border-right:1px solid nth($cp, 2);border-bottom-left-radius:5px;background:nth($cp, 1);@include ts;
+  
+    // 通用笔记导航
+    .nav-box {position:absolute;left:0;top:0;width:100%;height:145px;padding:20px 0 10px;line-height:35px;font-size:1.5rem;
+  
+      a {display:block;width:100%;height:35px;padding:0 15px;@include ts;}
+      a:hover {background:nth($cp, 2);}
+      a.active {background:nth($cp, 3);color:nth($cd, 3);}
+      i {padding:0 3px;font-size:2rem;vertical-align:bottom;}
+      cite {float:right;margin:.8rem 0;padding:2px 5px;line-height:1.3rem;border-radius:50%;font-size:1.2rem;background:nth($cp, 3);font-style:normal;}
+    }
+
+    // 目录列表
+    .category {position:relative;width:100%;height:100%;line-height:35px;padding-top:35px;
+
+      .all-cate {position:absolute;left:0;top:0;width:100%;height:35px;padding:0 20px;font-size:1.5rem;font-weight:bold;
+
+        a {position:absolute;right:10px;top:0;width:25px;height:25px;margin:5px 0;line-height:25px;border-radius:50%;text-align:center;font-size:2rem;font-weight:normal;@include ts;
+          &:hover {background:nth($cp, 2);}
+        }
+      }
+      .tree-box {overflow:hidden;overflow-y:auto;width:100%;height:100%;
+        
+        .item {display:block;width:100%;height:35px;padding:0 15px;color:nth($cgr, 2);@include ts;
+
+          &:hover {background:nth($cp, 2);}
+          &.active {background:nth($cp, 3);color:nth($cd, 1);}
+
+          i {padding:0 3px;font-size:2rem;vertical-align:bottom;color:nth($cgr, 1);}
+          cite {float:right;margin:.8rem 0;padding:2px 5px;line-height:1.3rem;border-radius:50%;font-size:1.2rem;background:nth($cp, 3);font-style:normal;}
+        }
+        
+      }
+    }
+    
+  }
+
+  // 笔记主界面(笔记列表 + 笔记预览&编辑)
+  .main-body {position:relative;z-index:10;width:100%;height:100%;padding-left:200px;background:#fff;@include ts;
+
+    // 笔记列表样式
+    .note-list-box {overflow:hidden;overflow-y:auto;position:absolute;left:0;top:0;width:200px;height:100%;padding:5px 0;box-shadow:inset -1px 0 0 nth($cp, 2);
+      
+      .item {position:relative;width:100%;height:35px;padding:5px 8px;line-height:25px;@include ts;
+
+        i {font-size:1.6rem;vertical-align:bottom;
+
+          &.star {color:nth($ct, 1)}
+          &.trash {color:nth($cr, 1)}
+        }
+        header {width:100%;font-size:1.2rem;color:nth($cd, 2);}
+        .summary {visibility:hidden;overflow:hidden;opacity:0;@include ts;}
+        &.icon-view {height:55px;
+          header {font-size:1.3rem;}
+          .summary {visibility:visible;width:100%;height:20px;line-height:20px;font-size:1rem;color:nth($cgr, 1);opacity:1}
+          .book {float: left;}
+          .subject {float: right;}
+        }
+
+        &:hover {background:nth($cp, 1);}
+        &.active {background:nth($cp, 1);color:nth($cd, 3);
+          
+          header {font-weight:bold;}
+        }
+        &::after {position:absolute;right:0;bottom:0px;width:87%;height:1px;border-bottom:1px solid nth($cp, 2);content:""}
+        &:last-child::after {display:none;}
+      }
+
+    }
+
+    // 笔记预览 & 编辑
+    .note-detail {position:relative;float:left;width:100%;height:100%;padding-top:40px;@include ts;
+
+      .default-bg {position:absolute;top:50%;left:50%;z-index:0;width:200px;height:200px;margin-top:-100px;margin-left:-100px;line-height:200px;font-size:20rem;text-align:center;color:nth($cp, 1);}
+
+      // 非编辑模式,右侧全屏
+      &.full-view {padding-top:0;}
+
+      .summary {position:absolute;left:0;top:0;width:100%;height:40px;padding:5px;
+
+        .category {float:left;width:12%;height:30px;margin-right:1%;
+
+          select {font-size:1.2rem;}
+          .trigon {right:5px;top:-1px;height:26px;}
+        }
+        .subject, .title {height:30px;font-size:1.3rem;}
+        .subject {float:left;width:12%;}
+        .title {float:right;width:72%;}
+      }
+
+      .note-view, .editor {display:block;position:relative;width:100%;height:100%;}
+      .note-view {overflow:hidden;overflow-y:auto;padding:15px 25px;font-size:1.3rem;
+        
+        &.indent > p {text-indent:2em}
+      }
+      .editor .do-meditor {border:0;}
+    }
+
+  }
+
+  // 非三栏布局, 隐藏左侧边栏和笔记列表
+  &.layout-1 {padding-left:0;
+
+    .sidebar {visibility:hidden;opacity:0;}
+    .main-body {padding-left:0;
+
+      .note-list-box {visibility:hidden;opacity:0}
+      .note-detail {padding-top:0;
+        .summary {visibility:hidden;}
+      }
+    }
+  }
+
+  
+  &.dark {
+
+    .sidebar {border-color:nth($cd, 2);background:nth($cd, 1);
+
+      // 通用笔记导航
+      .nav-box {
+    
+        a:hover {background:nth($cd, 2);}
+        a.active {background:nth($cd, 3);color:nth($cp, 3);}
+        cite {background:nth($cd, 3);}
+      }
+
+      // 目录列表
+      .category {
+        .tree-box {
+          
+          .item {color:nth($cp, 3);
+
+            &:hover {background:nth($cd, 2);}
+            &.active {background:nth($cd, 3);color:nth($cp, 1);}
+
+            i {color:nth($cgr, 1);}
+            cite {background:nth($cd, 3);}
+          }
+          
+        }
+      }
+    } 
+    // 笔记主界面(笔记列表 + 笔记预览&编辑)
+    .main-body {background:nth($cd, 1);
+
+      .note-list-box {box-shadow:inset -1px 0 0 nth($cd, 2);
+
+        .item {
+
+          i {
+
+            &.star {color:nth($ct, 1)}
+            &.trash {color:nth($cr, 1)}
+          }
+          header {color:nth($cp, 2);}
+          &.icon-view {
+            .summary {color:nth($cgr, 1);}
+          }
+
+          &:hover {background:nth($cd, 2);}
+          &.active {background:nth($cd, 2);color:nth($cp, 3);
+            
+          }
+          &::after {border-color:nth($cd, 2);}
+        }
+      }
+
+      // 笔记预览 & 编辑
+      .note-detail {background:nth($cd, 1);
+
+        .default-bg {color:nth($cd, 2);}
+
+        .note-view {color:nth($cp, 3);
+
+          &.do-marked-theme {
+
+            h1,h2,h3,h4,h5,h6 {
+
+              &::before {border-color:nth($cgr, 1);}
+
+              span {background:nth($cd, 1);color:nth($cp, 1);}
+            }
+
+            em {color:nth($cgr, 1);}
+            strong {color:nth($cp, 1);}
+
+            blockquote {
+              &.md-quote {background:nth($cd, 2);color:nth($cp, 3);border-color:nth($cd, 3);}
+            }
+
+            .do-ui-inlinecode {background:nth($cd, 2);}
+            .do-ui-blockcode {background:nth($cd, 2);color:nth($cp, 3);
+            
+              .lang {color:nth($cp, 3);
+              
+                .c-punctuation {color:nth($cp, 3);}
+              }
+
+            }
+          }
+
+          &.do-marked-theme-gfm {
+
+            h1,h2,h3,h4,h5,h6 {
+
+              &::after {border-color:nth($cgr, 1);}
+
+              span {color:nth($cp, 1);}
+            }
+
+            em {color:nth($cgr, 1);}
+            strong {color:nth($cp, 1);}
+
+            blockquote {
+              &.md-quote {border-color:nth($cd, 3);}
+            }
+
+            .do-ui-inlinecode,.do-ui-blockcode {background:nth($cd, 2);border-color:nth($cd, 3);}
+            .do-ui-blockcode {background:nth($cd, 2);color:nth($cp, 3);
+            
+              .lang {color:nth($cp, 3);
+              
+                .c-punctuation {color:nth($cp, 3);}
+              }
+
+            }
+          }
+
+  
+          &.do-marked-theme-vue {
+
+            em {color:nth($cgr, 1);}
+            strong {color:nth($cp, 1);}
+
+            blockquote {
+              &.md-quote {background:nth($cd, 2);color:nth($cp, 3);border-color:nth($cd, 3);}
+            }
+
+            .do-ui-inlinecode {background:nth($cd, 2);}
+            .do-ui-blockcode {background:nth($cd, 2);color:nth($cp, 3);
+            
+              .lang {color:nth($cp, 3);
+              
+                .c-punctuation {color:nth($cp, 3);}
+              }
+
+            }
+          }
+
+         
+          
+        }
+      }
+
+    }
+  }
+
+}

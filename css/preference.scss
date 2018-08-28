@@ -1,0 +1,138 @@
+@charset "UTF-8";
+/**
+ * 
+ * @authors yutent (yutent@doui.cc)
+ * @date    2018-08-06 00:59:49
+ */
+
+@import "var.scss";
+
+body {padding-top:80px;line-height:1.5;font-size:1.3rem;color:nth($cd, 1);
+
+  &.dark {color:nth($cp, 1);background:nth($cd, 1);
+
+    .do-ui-select,.do-ui-radio, .do-ui-checkbox {color:nth($cp, 3);}
+    .do-ui-input,.do-ui-select select {background:nth($cgr, 1);}
+
+  }
+}
+
+.do-mod-titlebar {position:absolute;left:0;top:0;z-index:99;width:100%;height:80px;background:linear-gradient(180deg, #f7f8fb 0, #e7e8eb);border-bottom:1px solid nth($cp, 3);
+
+  .btns {position:absolute;z-index:3;left:12px;top:0;width:auto;height:30px;padding:9px 0;
+
+    .btn {display:inline-block;width:12px;height:12px;margin:0 2px;background:url(/images/btn_gray@2x.png) no-repeat;background-size:cover;}
+
+    &.focus {
+      .quit {background-image:url(/images/btn_close_focus@2x.png);}
+    }
+    &:hover {
+      .quit {background-image:url(/images/btn_close_hover@2x.png);}
+    }
+  }
+
+  .win-title {position:absolute;left:0;top:0;z-index:0;width:100%;height:30px;padding:0 15%;line-height:30px;font-size:1.4rem;text-align:center;font-weight:normal;}
+
+  .tool-box {position:absolute;left:0;bottom:0;width:100%;height:45px;padding:0 12px;
+
+    .nav-box {float:left;width:auto;height:45px;
+
+      .item {float:left;width:auto;height:45px;margin:0 5px;padding:5px 8px 0;text-align:center;@include ts;
+
+        i {overflow:hidden;height:2rem;line-height:2rem;font-size:2.6rem;}
+        span {display:block;height:1.2rem;line-height:1.2rem;font-size:1.2rem;}
+
+        &:hover, &.active {border-top-left-radius:5px;border-top-right-radius:5px;background:linear-gradient(180deg, #f7f8fb 0, nth($cp, 3));}
+      }
+  
+    }
+  }
+
+  &.dark {background:linear-gradient(180deg, nth($cd, 1) 0, nth($cd, 2));border-color:nth($cd, 2);
+
+    .tool-box {
+      .nav-box {
+        
+        .item {
+          &:hover, &.active {border-top-left-radius:5px;border-top-right-radius:5px;background:linear-gradient(180deg, nth($cd, 1) 0, nth($cd, 3));}
+        }
+      }
+    }
+
+  }
+}
+
+
+.do-mod-main {position:relative;z-index:1;width:100%;height:100%;padding:50px 100px;
+
+  .section {width:100%;height:auto;min-height:30px;margin:10px 0;
+
+    .label {float:left;width:22%;height:30px;margin-right:5%;padding:0 8px;line-height:30px;text-align:right;}
+    .do-switch, .do-ui-input,.do-ui-select {float:left;}
+    .tips {float:left;padding:0 8px;line-height:30px;font-size:1.2rem;}
+  }
+
+  .general-box, .compose-box {
+    .theme-list {width:150px;}
+  }
+
+  .plugin-box {position:relative;width:100%;height:100%;border: 1px solid nth($cp, 3);
+
+    .install-plugin {position:absolute;left:0; top:-35px;font-size:1.2rem;
+      input {position:absolute;left:0;top:0;z-index:0;width:100%;height:100%;opacity:0}
+    }
+    .plugin-list {overflow:hidden;overflow-y:auto;width:100%;height:100%;padding:5px;
+
+      .item {width:100%;height:60px;margin:0 0 3px;padding:5px 10px;border-bottom:1px solid nth($cp, 1);
+        
+        .name,.tool {display:block;font-size:1.4rem;}
+        .name {line-height:25px;}
+        .tool {padding-bottom:6px;
+
+          span {margin:0 10px 0 0;}
+        }
+
+        &:last-child {border-bottom:0}
+      }
+      
+      .setting-box {position:fixed;z-index:9;left:0;top:-352px;width:100%;height:432px;padding:50px 100px;background:#fff;
+        
+        &.active {top:80px;}
+        .close {position:absolute;right:0;top:0;width:50px;height:50px;line-height:50px;font-size:3rem;text-align:center;}
+        .save {position:absolute;left:50%;bottom:30px;margin-left:-40px;}
+        .field-box {overflow:hidden;overflow-y:auto;width:100%;height:90%;}
+        .field {width:100%;height:auto;min-height:30px;margin:10px 0;
+          
+          .label {float:left;width:22%;height:30px;margin-right:5%;padding:0 8px;line-height:30px;text-align:right;}
+          .do-switch, .do-ui-input,.do-ui-select {float:left;}
+        }
+      }
+    }
+  }
+
+  .donate-box {text-align:center;
+    img {display:inline-block;width:35%;margin:5%;}
+  }
+
+  .about-box {
+    pre {margin-bottom:20px;line-height:1;text-align:center;font-weight:bold;font-family:Menlo,Monaco,Consolas,"Courier New",monospace;}
+    p {padding:0 10%;margin:15px 0;font-size:14px;text-indent:2em;
+
+      a,
+      span {color:nth($ct, 1);text-decoration:underline;}
+    }
+  }
+
+
+  &.dark {
+    .plugin-box {border-color:nth($cd, 3);
+      
+      .plugin-list {
+
+        .item {border-color:nth($cd, 3);}
+        .setting-box {background:nth($cd, 1);}
+      }
+    }
+  }
+
+}

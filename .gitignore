@@ -1,0 +1,16 @@
+.Spotlight-V100
+.Trashes
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+
+
+
+node_modules/
+data/logs
+public/upload/
+app.yaml
+lock
+
